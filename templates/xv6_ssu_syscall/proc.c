@@ -356,42 +356,54 @@ scheduler(void)
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     
+    // Structure for the selection of scheduling targets
+    struct proc *best_rt = 0;
+    struct proc *select_rr = 0;
+
     int best_priority = EXCEEDED_NICE;
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      // Find the "best_priority"
-      if(p->is_RT == RT && p->state == RUNNABLE){
-	if(p->priority < best_priority){
-	  best_priority = p->priority;
+    int start_rt_idx = last_rt_p - ptable.proc;
+    int start_rr_idx = last_rr_p - ptable.proc;
+
+    for(int i=1; i<=NPROC; i++){
+	// Explore the process after the last process
+	int idx = (start_rt_idx + i) % NPROC;
+	p = &ptable.proc[idx];
+
+	if(p->is_RT == RT && p->state == RUNNABLE){
+	    if(p->priority < best_priority){
+		best_priority = p->priority;
+		best_rt = p;
+	    }
+ 	    // Nearest process since last process
+	    else if(p->priority == best_priority && best_rt == 0)
+		best_rt = p;
 	}
-      }
-    }
-    
-    // First, Run the RT Process 
-    if(best_priority != EXCEEDED_NICE){
-	for(p = last_rt_p+1; p < &ptable.proc[NPROC]; p++){
-	    if(p->state == RUNNABLE && p->is_RT == RT && p->priority == best_priority)
-	    	goto dispatch_rt;
-        }
-	// for Circular
-	for(p = ptable.proc; p <= last_rt_p; p++) {
-	    if(p->state == RUNNABLE && p->is_RT == RT && p->priority == best_priority)
-                goto dispatch_rt;
-	}
+    }		
+
+    if(best_rt != 0)
+    {
+	p = best_rt;
+	goto dispatch_rt;
     }
     
     // Second. If there are not RT Proc, Run the RR Proc.
     // But, Verify the RT process each time the process runs.
     // best_priority == EXCEEDED_NICE : Non RT Process
-    for(p = last_rr_p + 1; p<&ptable.proc[NPROC]; p++){
-        if(p->state == RUNNABLE && p->is_RT == RR)
-	    goto dispatch_rr;
+    for(int i = 1; i <= NPROC; i++){
+	int idx = (start_rr_idx + i) % NPROC;
+        p = &ptable.proc[idx];
+
+        if(p->state == RUNNABLE && p->is_RT == RR){
+            select_rr = p;
+            break; 
+        }
     }
-    // for Circular 
-    for(p = ptable.proc; p <= last_rr_p; p++){
-	if(p->state == RUNNABLE && p->is_RT == RR)
-	    goto dispatch_rr;
+
+    if(select_rr != 0){
+	p = select_rr;
+	goto dispatch_rr;
     }
-    
+
     // Nothing to do
     release(&ptable.lock);
     continue;

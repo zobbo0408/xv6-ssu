@@ -18,7 +18,7 @@ int main(int argc, char **argv)
         if(pid == 0)
         {
                 
-		pid = fork_rt(11);
+		pid = fork_rt(10);
                 if(pid == 0)
                 {
 			dummy = 0;
