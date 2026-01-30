@@ -363,7 +363,7 @@ scheduler(void)
     int best_priority = EXCEEDED_NICE;
     for(int i=1; i<=NPROC; i++){
 	// Explore the process after the last process
-	int idx = (last_rt_p - ptable.proc + i) % NPROC;	// Pointing to explore for process
+	int idx = (last_rt_p - ptable.proc + i) % NPROC;	// To explore next to the navigated process
 	p = &ptable.proc[idx];
 
 	if(p->is_RT == RT && p->state == RUNNABLE){
@@ -387,7 +387,7 @@ scheduler(void)
     // But, Verify the RT process each time the process runs.
     // best_priority == EXCEEDED_NICE : Non RT Process
     for(int i = 1; i <= NPROC; i++){
-	int idx = (last_rr_p - ptable.proc + i) % NPROC;	// Pointing to explore for process
+	int idx = (last_rr_p - ptable.proc + i) % NPROC;	// To explore next to the navigated process
         p = &ptable.proc[idx];
 
         if(p->state == RUNNABLE && p->is_RT == RR){
