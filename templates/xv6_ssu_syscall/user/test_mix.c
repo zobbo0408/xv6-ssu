@@ -18,7 +18,7 @@ int main(int argc, char **argv)
         if(pid == 0)		
         {
 		dummy = 0;
-                for (i=0; i<10; i++){
+                for (i=0; i<3; i++){
                         for (j=0; j<INNER_LOOP; j++)
                                 dummy += PI*j;
                         printf(1, "P2 (RR), i = %d, dummy = %x\n", i, dummy);
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
                 if(pid == 0)
 		{
 			dummy = 0;
-                        for (i=0; i<10; i++){
+                        for (i=0; i<3; i++){
                                 for (j=0; j<INNER_LOOP; j++)
                                         dummy += PI*j;
                                 printf(1, "P3 (RR), i = %d, dummy = %x\n", i, dummy);
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 			{
 				printf(1, "=== RT SCHED START ===\n");
 				dummy = 0;
-                                for (i=0; i<10; i++){
+                                for (i=0; i<3; i++){
                                 	for (j=0; j<INNER_LOOP; j++)
                                         	dummy += PI*j;
                                         printf(1, "PA (RT), i = %d, dummy = %x\n", i, dummy);
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 				if(pid == 0)
 				{
 					dummy = 0;
-                                        for (i=0; i<10; i++){
+                                        for (i=0; i<3; i++){
                                                 for (j=0; j<INNER_LOOP; j++)
                                                         dummy += PI*j;
                                                 printf(1, "PB (RT), i = %d, dummy = %x\n", i, dummy);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 					{
 
 						dummy = 0;
-                                                for (i=0; i<10; i++){
+                                                for (i=0; i<3; i++){
                                                         for (j=0; j<INNER_LOOP; j++)
                                                                 dummy += PI*j;
                                                         printf(1, "PC (RT), i = %d, dummy = %x\n", i, dummy);
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 						if(pid == 0) // P4
 						{
 							dummy = 0;
-                                                        for (i=0; i<20; i++){
+                                                        for (i=0; i<6; i++){
                                                                 for (j=0; j<INNER_LOOP; j++)
                                                                         dummy += PI*j;
                                                                 printf(1, "P4 (RR), i = %d, dummy = %x\n", i, dummy);
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 						else
 						{
 							dummy = 0;
-							for (i=10; i<20; i++){
+							for (i=3; i<6; i++){
 								for (j=0; j<INNER_LOOP; j++)
 									dummy += PI*j;
 								printf(1, "PC (RT), i = %d, dummy = %x\n", i, dummy);
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 					else
 					{
 						dummy = 0;
-						for (i=10; i<20; i++){
+						for (i=3; i<6; i++){
 							for (j=0; j<INNER_LOOP; j++)
 								dummy += PI*j;
 							printf(1, "PB (RT), i = %d, dummy = %x\n", i, dummy);
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 				else
 				{
 					dummy = 0;
-					for (i=10; i<20; i++){
+					for (i=0; i<3; i++){
 						for (j=0; j<INNER_LOOP; j++)
 							dummy += PI*j;
                                         	printf(1, "PA (RT), i = %d, dummy = %x\n", i, dummy);
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 			else
 			{
 				dummy = 0;
-				for (i=10; i<20; i++){
+				for (i=3; i<6; i++){
 					for (j=0; j<INNER_LOOP; j++)
 						dummy += PI*j;
 					printf(1, "P3 (RR), i = %d, dummy = %x\n", i, dummy);
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 		else
 		{
 			dummy = 0;
-                	for (i=10; i<20; i++){
+                	for (i=3; i<6; i++){
                         	for (j=0; j<INNER_LOOP; j++)
                                	        dummy += PI*j;
                         	printf(1, "P2 (RR), i = %d, dummy = %x\n", i, dummy);
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
         else
         {
 		dummy = 0;
-                for (i=0; i<20; i++){ 
+                for (i=0; i<6; i++){ 
                         for (j=0; j<INNER_LOOP; j++)
                                         dummy += PI*j;
                         printf(1, "P1 (RR), i = %d, dummy = %x\n", i, dummy);

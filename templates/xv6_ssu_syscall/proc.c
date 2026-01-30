@@ -215,10 +215,9 @@ int do_fork(enum Sched_State type, int nice)
 	
 	// The difference between fork and fork_rt.
 	np->is_RT = type;
-	if(type == RT)
-		np->priority = nice;
-	else
-		np->priority = curproc->priority;
+	
+	if(type == RT)	np->priority = nice;
+	else		np->priority = curproc->priority;
 	
 	np->state = RUNNABLE;
 
@@ -232,6 +231,7 @@ fork(void)
 {
 	// If calling fork(), runnung do_fork(RR, DEFAULT_NICE)
 	// DEFAULT_NICE in param.h
+	// If the type is RR, not using the nice param.
 	return do_fork(RR, DEFAULT_NICE);
 }
 
@@ -326,7 +326,7 @@ wait(void)
       release(&ptable.lock);
       return -1;
     }
-
+// Pointing to explore for process
     // Wait for children to exit.  (See wakeup1 call in proc_exit.)
     sleep(curproc, &ptable.lock);  //DOC: wait-sleep
   }
@@ -361,12 +361,9 @@ scheduler(void)
     struct proc *select_rr = 0;
 
     int best_priority = EXCEEDED_NICE;
-    int start_rt_idx = last_rt_p - ptable.proc;
-    int start_rr_idx = last_rr_p - ptable.proc;
-
     for(int i=1; i<=NPROC; i++){
 	// Explore the process after the last process
-	int idx = (start_rt_idx + i) % NPROC;
+	int idx = (last_rt_p - ptable.proc + i) % NPROC;	// Pointing to explore for process
 	p = &ptable.proc[idx];
 
 	if(p->is_RT == RT && p->state == RUNNABLE){
@@ -390,7 +387,7 @@ scheduler(void)
     // But, Verify the RT process each time the process runs.
     // best_priority == EXCEEDED_NICE : Non RT Process
     for(int i = 1; i <= NPROC; i++){
-	int idx = (start_rr_idx + i) % NPROC;
+	int idx = (last_rr_p - ptable.proc + i) % NPROC;	// Pointing to explore for process
         p = &ptable.proc[idx];
 
         if(p->state == RUNNABLE && p->is_RT == RR){
